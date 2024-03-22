@@ -2,6 +2,7 @@ This Spring Boot application demonstrates a secure API with JWT (JSON Web Token)
 
 **Tech Stack**:
 
+ -> **Package Manager**: Maven  
  -> Language: Java 17  
  -> Backend: Spring Boot 3  
  -> Security: Spring Security 6  
