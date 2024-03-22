@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+//this class handles the logic of registering and authentication
 @Service
 public class AuthenticationService {
 
@@ -23,9 +24,18 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
+    //regiistering a new user
+    /*
+    1. Creates a new User object from the request data.
+    2. Hashes the user's password using the passwordEncoder.
+    3. Saves the user details to the repository using userRepository.save().
+    4. Generates a JWT token for the newly registered user using jwtService.generateToken().
+    5. Returns an AuthenticationResponse object likely containing the generated token.
+     */
     public AuthenticationResponse register(User request){
         User user = new User();
 
+        //for devlopment purpose we use the setters
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());
@@ -40,6 +50,20 @@ public class AuthenticationService {
         return new AuthenticationResponse(token);
     }
 
+    //authentication of a user
+    /*
+    1. Attempts to authenticate the user using the provided username and password.
+       It does this by creating a "UsernamePasswordAuthenticationToken" Object and passing it
+       to the "authenticationManager.authenticate()" method. This method interacts with configured
+       authentication providers to verify user credentials.
+
+    2. If authentication is successful (no exception thrown), retrieves the user details from
+       the repository using "userRepository.findByUsername()".
+
+    3. Generates a JWT token for the authenticated user using "jwtService.generateToken()".
+
+    4. Returns an AuthenticationResponse object likely containing the generated token.
+     */
     public AuthenticationResponse authenticate(User request){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

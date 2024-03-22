@@ -27,6 +27,30 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+    //configuring the security filter chain
+    /*
+    It configures the security chain using the provided HttpSecurity object.
+        1. csrf().disable(): Disables CSRF protection (Cross-Site Request Forgery)
+         as it might not be required for your specific API-driven application
+         (potentially vulnerable in web applications).
+
+        2. authorizeHttpRequests(req -> ...): Configures authorization rules:
+            -> Grants access to URLs matching "login/" and "register/"
+               without requiring authentication (.permitAll()).
+            -> Requires authentication (.authenticated()) for any other request.
+
+        3. userDetailsService(userDetailsService): Sets the custom user details service
+           to be used for user lookup during authentication.
+
+        4. sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)):
+           Disables session management as JWT is a stateless authentication mechanism.
+
+        5. addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class):
+           Adds the "jwtAuthenticationFilter" before the default "UsernamePasswordAuthenticationFilter".
+           This ensures JWT processing happens before attempting username/password authentication.
+
+    The method returns the configured SecurityFilterChain bean.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -42,11 +66,25 @@ public class SecurityConfig {
                 .build();
     }
 
+    //creating the password encoder
+    /*
+    This method creates and returns a Spring bean of type PasswordEncoder.
+
+    It uses the BCryptPasswordEncoder class, a popular choice for password hashing due to its work
+    factor and security features.
+     */
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
+    //creating the AuthenticationManager
+    /*
+    This method creates and returns a Spring bean of type AuthenticationManager.
+
+    It retrieves the AuthenticationManager from the provided AuthenticationConfiguration object.
+    This manager is responsible for user authentication using configured providers.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();

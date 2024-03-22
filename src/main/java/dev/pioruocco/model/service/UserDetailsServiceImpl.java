@@ -15,7 +15,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    //method for loading the user
+    //method for loading the user. we find it with the repository, if not found it throws an exception
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));

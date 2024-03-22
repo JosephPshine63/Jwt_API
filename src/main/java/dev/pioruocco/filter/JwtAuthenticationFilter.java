@@ -20,7 +20,6 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-
     private final UserDetailsServiceImpl userDetailsService;
 
     public JwtAuthenticationFilter(JwtService jwtService, UserDetailsServiceImpl userDetailsService) {
@@ -28,6 +27,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    //
+    /*
+    This method is the core of the filter and is called whenever a request passes through the filter.
+    It overrides the doFilterInternal method from the OncePerRequestFilter class of Spring Security.
+    Here's a breakdown of the logic:
+        1. It retrieves the Authorization header from the request.
+
+        2. If the header is missing or doesn't start with "Bearer ",
+           it allows the request to proceed without further processing
+           (filterChain.doFilter(request, response)) as it likely doesn't contain a JWT token for authentication.
+
+        3. If a valid "Bearer " header is found, it extracts the token string from the header.
+
+        4. It calls the jwtService's extractUsername method to retrieve the username from the token.
+
+        5. If a username is extracted and there's no existing authentication in the SecurityContext:
+            -> It loads the user details object using the userDetailsService's loadUserByUsername method.
+            -> It calls the jwtService's isValid method to verify the token for the retrieved user.
+
+        6. If the token is valid:
+            -> A UsernamePasswordAuthenticationToken object is created with the loaded
+               user details, null password (as JWT doesn't provide password), and user authorities.
+            -> Details about the request are set on the authentication token using WebAuthenticationDetailsSource
+            .
+    The SecurityContext is set with this authentication object, indicating a
+    successful JWT-based authentication.
+    Finally, it allows the request to proceed through the
+    filter chain(filterChain.doFilter(request, response)) with the established security context.
+     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,

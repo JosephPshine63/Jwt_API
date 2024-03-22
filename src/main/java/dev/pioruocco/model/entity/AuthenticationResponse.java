@@ -1,5 +1,10 @@
 package dev.pioruocco.model.entity;
 
+//class that represents the response of the AuthenticationService
+/*
+AuthenticationResponse class serves as a simple container for holding and providing
+the JWT token generated during user registration or authentication.
+ */
 public class AuthenticationResponse {
 
     private String token;

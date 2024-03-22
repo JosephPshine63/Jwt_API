@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+//entity representing the user in the database
+//we implements UserDetails so that we can set the information of the user
 @Entity
 @Table(name = "user")
 @CrossOrigin
@@ -32,7 +34,7 @@ public class User implements Serializable, UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) //we say to the database to store its value as string
     private Role role;
 
 
@@ -86,27 +88,31 @@ public class User implements Serializable, UserDetails {
     }
 
     //method of USerDetails
-    //authorithies of the user
+    //authorithies of the user (its roles)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
+    //checking if the account is expired
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    //checking if the account is locked
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    //checking if the credentials are exprired or not
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    //properties if the account is enabled
     @Override
     public boolean isEnabled() {
         return true;
