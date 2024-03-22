@@ -8,7 +8,7 @@ This Spring Boot application demonstrates a secure API with JWT (JSON Web Token)
  -> User Management: In-memory repository (for simplicity, consider a database like JPA for real applications)  
  -> Password Encoding: BCryptPasswordEncoder  
 
-**Features**:
+**Features**:  
  -> User registration with secure password storage (hashed passwords)  
  -> User login with JWT token generation for authenticated users  
  -> JWT-based authentication for secured API endpoints (replace with your actual API logic)  
